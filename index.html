@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Avanzado</title>
+    <link rel="stylesheet" href="../_css/styles.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Formulario Avanzado</h1>
+        <div class="progreso-formulario">
+            <div class="barra-progreso" id="barra-progreso"></div>
+    </div>
+    
+    <p style="text-align: center; color: #666; margin-bottom: 30px">
+        Progreso: <span id="porcentajeProgreso">0%</span>
+    </p>
+    
+
+    <form id="formularioAvanzado"
+    novalidate>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input 
+            type="text" 
+            id="nombre" 
+            name="nombre" 
+            required
+            autofocus
+            placeholder="Ingrese su nombre"
+            minlength="3"
+            maxlength="50"
+            pattern="[A-Za-z Á]{3,}">
+            <div class="mensaje-error" id="errorNombre"></div>
+        <div class="mensaje-exito" id="exitoNombre"></div>
+      </div>
+        
+
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input 
+            type="text" 
+            id="apellido" 
+            name="apellido" 
+            required
+            autofocus
+            placeholder="Ingrese su apellido"
+            minlength="3"
+            maxlength="50"
+            pattern="[A-Za-z Á]{3,}">
+            <div class="mensaje-error" id="errorApellido"></div> 
+    <div class="mensaje-exito" id="exitoApellido"></div> 
+      </div>
+        
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required placeholder="Ingrese su correo electrónico"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" minlength="5" maxlength="100">
+            <div class="mensaje-error" id="emailError">
+                <p>Por favor, ingrese un correo electrónico válido.</p>
+            </div>
+            <div class="mensaje-exito" id="exitoEmail"></div>
+        </div>
+
+        <div class="form-group">
+    <label for="confirmarEmail">Confirmar Email:</label>
+    <input 
+        type="email" 
+        id="confirmarEmail" 
+        name="confirmarEmail" 
+        required 
+        placeholder="Repita su correo electrónico"
+        minlength="5" 
+        maxlength="100">
+    <div class="mensaje-error" id="errorConfirmarEmail"></div>
+    <div class="mensaje-exito" id="exitoConfirmarEmail"></div>
+</div>
+
+
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required placeholder="Ingrese su número de teléfono"
+            pattern="^\d{10}$" minlength="10" maxlength="15">
+            <div class="mensaje-error" id="errorTelefono"></div>
+            <div class="mensaje-exito" id="exitoTelefono"></div>
+        </div>
+
+        <div class="form-group">
+    <label for="password">Contraseña:</label>
+    <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        required 
+        placeholder="Mínimo 8 caracteres"
+        minlength="8"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$">
+    
+    <div class="password-strength">
+        <div class="strength-bar">
+            <div class="strength-indicator" id="strengthIndicator"></div>
+        </div>
+    </div>
+
+    <div class="error-message" id="errorPassword">
+        <p>La contraseña debe tener al menos 8 caracteres.</p>
+    </div>
+    <div class="mensaje-exito" id="exitoPassword"></div>
+</div>
+
+<div class="form-group">
+    <label for="confirmarPassword">Confirmar Contraseña:</label>
+    <input 
+        type="password" 
+        id="confirmarPassword" 
+        name="confirmarPassword" 
+        required 
+        placeholder="Repita su contraseña"
+        minlength="8">
+    <div class="mensaje-error" id="errorConfirmarPassword"></div>
+    <div class="mensaje-exito" id="exitoConfirmarPassword"></div>
+</div>
+        <div class="form-group">
+            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+            <div class="mensaje-error" id="errorFechaNacimiento"></div>
+            <div class="mensaje-exito" id="exitoFechaNacimiento"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="pais">País:</label>
+            <select id="pais" name="pais" required>
+                <option value="">Seleccione su país</option>
+                <option value="argentina">Argentina</option>
+                <option value="chile">Chile</option>
+                <option value="colombia">Colombia</option>
+                <option value="mexico">México</option>
+                <option value="peru">Perú</option>
+            </select>
+            <div class="mensaje-error" id="errorPais"></div>
+            <div class="mensaje-exito" id="exitoPais"></div>
+        </div>
+
+        <button type="submit" id="submitBtn">Enviar</button>
+    </form>
+
+    </div>
+
+    <script src="../_js/formulario.js"></script>
+
+
+</body>
+
+</html>
