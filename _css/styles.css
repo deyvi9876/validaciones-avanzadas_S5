@@ -3,7 +3,8 @@ body {
     max-width: 700px;
     margin: 0 auto;
     padding: 20px;
-    background-color: linear-gradient(135deg, #13e753 0%, #0060e6 100%);
+    background: linear-gradient(135deg, #e01212 0%, #d9d9d9 100%);
+    background-attachment: fixed;
     min-height: 100vh;
 }
 
@@ -25,7 +26,7 @@ body {
 
 .barra-progreso {
     height: 100%;
-    background:linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #667eea, #26df26);
     width: 0;
     transition: width 0.5s ease;
     border-radius: 3px;
@@ -41,4 +42,153 @@ label {
     transition: all 0.3s ease;
     letter-spacing: 0.5px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+input.valido,
+select.valido,
+textarea.valido {
+    border-color: #2ecc71;
+    background-color: #f8fff9;
+}
+
+input.error,
+select.error,
+textarea.error {
+    border-color: #e74c3c;
+    background-color: #ffffff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.mensaje-error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
+    animation: slidedown 0.3s ease;
+}
+
+.mensaje-exito {
+    color: #2ecc71;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
+    animation: slidedown 0.3s ease;
+}
+
+@keyframes slidedown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.password-strength {
+    height: 6px;
+    border-radius: 2px;
+    margin-top: 5px;
+    transition: all 0.3s ease;
+    background-color: #ccc; /* color base por si aún no tiene clase de fuerza */
+    width: 0; /* puede ser 100% para testear visualmente */
+}
+.strength-weak {
+    background-color: #e74c3c;
+    width: 33%;
+}
+.strength-medium {
+    background-color: #f1c40f;
+    width: 66%;
+}
+.strength-strong {
+    background-color: #2ecc71;
+    width: 90%;
+}
+.strength-very-strong {
+    background-color: #3498db;
+    width: 100%;
+}
+
+
+button {
+    background-color: linear-gradient(135deg, #13e753 0%, #0060e6 100%);
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 1, 1, 0.2);
+}
+
+button:disabled {
+    background-color: #0591ee;
+    cursor: not-allowed;
+}
+
+.contador-caracteres {
+    font-size: 0.9rem;
+    color: #07f763;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.resumen-datos {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+    display: none;
+    border-left: 4px solid #3498db;
+}   
+
+.dato.resumen {
+    margin-bottom: 10px;
+padding: 10px;
+background: #f0eded;
+border-radius: 6px;
+border: 1 px solid #ddd;
+}
+
+.dato.resumen {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #2c3e50;
 }

@@ -60,7 +60,7 @@
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required placeholder="Ingrese su correo electrónico"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" minlength="5" maxlength="100">
+           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$" mnlength="5" maxlength="100">
             <div class="mensaje-error" id="emailError">
                 <p>Por favor, ingrese un correo electrónico válido.</p>
             </div>
@@ -84,13 +84,16 @@
 
         <div class="form-group">
             <label for="telefono">Teléfono:</label>
-            <input type="tel" id="telefono" name="telefono" required placeholder="Ingrese su número de teléfono"
-            pattern="^\d{10}$" minlength="10" maxlength="15">
+            <input type="tel" id="telefono" name="telefono" required placeholder="###-###-##-##"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" minlength="10" maxlength="15">
             <div class="mensaje-error" id="errorTelefono"></div>
             <div class="mensaje-exito" id="exitoTelefono"></div>
         </div>
 
         <div class="form-group">
+
+
+    <div class="form-group">
     <label for="password">Contraseña:</label>
     <input 
         type="password" 
@@ -99,19 +102,20 @@
         required 
         placeholder="Mínimo 8 caracteres"
         minlength="8"
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$">
-    
-    <div class="password-strength">
-        <div class="strength-bar">
-            <div class="strength-indicator" id="strengthIndicator"></div>
-        </div>
-    </div>
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$">
 
-    <div class="error-message" id="errorPassword">
-        <p>La contraseña debe tener al menos 8 caracteres.</p>
+    <!-- Barra de fortaleza corregida -->
+    <div class="password-strength" id="strengthBar"></div>
+
+    <div class="mensaje-error" id="errorPassword">
+        <p>La contraseña debe tener al menos 8 caracteres y contener una mayúscula y un número.</p>
     </div>
     <div class="mensaje-exito" id="exitoPassword"></div>
 </div>
+
+
+
+
 
 <div class="form-group">
     <label for="confirmarPassword">Confirmar Contraseña:</label>
@@ -146,14 +150,296 @@
             <div class="mensaje-exito" id="exitoPais"></div>
         </div>
 
-        <button type="submit" id="submitBtn">Enviar</button>
+        <div class="form-group">
+            <label for="comentarios">Comentarios:</label>
+            <textarea id="comentarios" name="comentarios" rows="4" placeholder="Cuéntanos sobre ti(maximo 200 caracteres)" maxlength="200" pattern="^[A-Za-z0-9\s.,!?;:()\-]{0,200}$"></textarea>
+       <div class ="contador-caracteres"></div>
+            <span id="contadorCaracteres">0/200</span>
+        </div>
+
+        <div class form-group>
+            <label for="terminos">Acepto los términos y condiciones</label>
+            <input type="checkbox" id="terminos" name="terminos" required>
+            <label for="terminos"style="font-size: 0.9em; color: #666;">(Debe aceptar los términos para enviar el formulario)</label>
+            <div class="mensaje-error" id="errorTerminos"></div>
+         
+        </div>
+
+        <button type="submit" id="btnEnviar" disabled>Enviar</button>
+
+      </div>
     </form>
 
-    </div>
+    <script>
 
-    <script src="../_js/formulario.js"></script>
+        // 🎯 SISTEMA DE VALIDACIÓN AVANZADA
+const formulario = document.getElementById('formularioAvanzado');
+const campos = formulario.querySelectorAll('input, textarea, select');
+const btnEnviar = document.getElementById('btnEnviar');
+let estadoValidacion = {};
+
+campos.forEach((campo) => {
+    estadoValidacion[campo.name] = false;
+});
+
+// Validación nombre
+document.getElementById('nombre').addEventListener('input', function () {
+    if (this.value.trim().length < 3) {
+        mostrarError('errorNombre', 'El nombre debe tener al menos 3 caracteres');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoNombre', '✓ Nombre válido');
+        marcarCampo(this, true);
+    }
+});
+
+// Validación apellido
+document.getElementById('apellido').addEventListener('input', function () {
+    if (this.value.trim().length < 3) {
+        mostrarError('errorApellido', 'El apellido debe tener al menos 3 caracteres');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoApellido', '✓ Apellido válido');
+        marcarCampo(this, true);
+    }
+});
+
+// Validación email
+document.getElementById('email').addEventListener('input', function () {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
 
 
-</body>
+    if (!emailRegex.test(this.value)) {
+        mostrarError('emailError', 'Correo no válido');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoEmail', '✓ Email válido');
+        marcarCampo(this, true);
+    }
+
+    // Verificar confirmación si ya fue escrito
+    const confirmar = document.getElementById('confirmarEmail');
+    if (confirmar.value) confirmar.dispatchEvent(new Event('input'));
+});
+
+// Confirmar Email
+document.getElementById('confirmarEmail').addEventListener('input', function () {
+    const email = document.getElementById('email').value;
+    if (this.value !== email) {
+        mostrarError('errorConfirmarEmail', 'Los correos no coinciden');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoConfirmarEmail', '✓ Correos coinciden');
+        marcarCampo(this, true);
+    }
+});
+
+// Teléfono
+document.getElementById('telefono').addEventListener('input', function () {
+    let valor = this.value.replace(/\D/g, '');
+    if (valor.length >= 6) {
+        valor = valor.slice(0, 3) + '-' + valor.slice(3, 6) + '-' + valor.slice(6, 10);
+    } else if (valor.length >= 3) {
+        valor = valor.slice(0, 3) + '-' + valor.slice(3);
+    }
+    this.value = valor;
+
+    const telefonoRegex = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    if (!telefonoRegex.test(valor)) {
+        mostrarError('errorTelefono', 'Formato: 300-123-4567');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoTelefono', '✓ Teléfono válido');
+        marcarCampo(this, true);
+    }
+});
+
+// Contraseña
+document.getElementById('password').addEventListener('input', function () {
+    const password = this.value;
+    if (password.length < 8) {
+        mostrarError('errorPassword', 'La contraseña debe tener al menos 8 caracteres');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoPassword', '✓ Contraseña válida');
+        marcarCampo(this, true);
+    }
+
+    const confirmar = document.getElementById('confirmarPassword');
+    if (confirmar.value) confirmar.dispatchEvent(new Event('input'));
+});
+
+// Confirmar contraseña
+document.getElementById('confirmarPassword').addEventListener('input', function () {
+    const pass = document.getElementById('password').value;
+    if (this.value !== pass) {
+        mostrarError('errorConfirmarPassword', 'Las contraseñas no coinciden');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoConfirmarPassword', '✓ Contraseñas coinciden');
+        marcarCampo(this, true);
+    }
+});
+
+// Fecha de nacimiento
+document.getElementById('fechaNacimiento').addEventListener('change', function () {
+    const fecha = new Date(this.value);
+    const hoy = new Date();
+    const edad = hoy.getFullYear() - fecha.getFullYear();
+    if (edad < 18 || edad > 100) {
+        mostrarError('errorFechaNacimiento', 'Edad no válida');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoFechaNacimiento', `✓ Edad válida (${edad} años)`);
+        marcarCampo(this, true);
+    }
+});
+
+// País
+document.getElementById('pais').addEventListener('change', function () {
+    if (this.value === '') {
+        mostrarError('errorPais', 'Seleccione un país');
+        marcarCampo(this, false);
+    } else {
+        mostrarExito('exitoPais', '✓ País válido');
+        marcarCampo(this, true);
+    }
+});
+
+// Comentarios
+document.getElementById('comentarios').addEventListener('input', function () {
+    const contador = document.getElementById('contadorCaracteres');
+    contador.textContent = `${this.value.length}/200`;
+    marcarCampo(this, true); // Siempre válido
+});
+
+// Términos
+document.getElementById('terminos').addEventListener('change', function () {
+    if (!this.checked) {
+        mostrarError('errorTerminos', 'Debe aceptar los términos');
+        marcarCampo(this, false);
+    } else {
+        ocultarMensaje('errorTerminos');
+        marcarCampo(this, true);
+    }
+});
+
+// Utilidades
+function mostrarError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    const exito = id.replace('error', 'exito');
+    ocultarMensaje(exito);
+}
+
+function mostrarExito(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    const error = id.replace('exito', 'error');
+    ocultarMensaje(error);
+}
+
+function ocultarMensaje(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+
+function marcarCampo(campo, valido) {
+    estadoValidacion[campo.name] = valido;
+    campo.classList.toggle('valido', valido);
+    campo.classList.toggle('invalido', !valido);
+    actualizarProgreso();
+    actualizarBotonEnvio();
+}
+
+function actualizarProgreso() {
+    const total = Object.keys(estadoValidacion).length;
+    const validos = Object.values(estadoValidacion).filter(Boolean).length;
+    const porcentaje = Math.round((validos / total) * 100);
+    document.getElementById('barra-progreso').style.width = porcentaje + '%';
+    document.getElementById('porcentajeProgreso').textContent = porcentaje + '%';
+}
+
+function actualizarBotonEnvio() {
+    const todoValido = Object.values(estadoValidacion).every(Boolean);
+    btnEnviar.disabled = !todoValido;
+}
+
+// ❌ Bloquear copiar, cortar y pegar en campos de contraseña
+['password', 'confirmarPassword'].forEach(id => {
+    const campo = document.getElementById(id);
+    ['copy', 'paste', 'cut'].forEach(evento => {
+        campo.addEventListener(evento, function (e) {
+            e.preventDefault();
+            alert('Por seguridad, no se permite copiar o pegar en este campo.');
+        });
+    });
+});
+
+['email', 'confirmarEmail'].forEach(id => {
+    const campo = document.getElementById(id);
+    ['copy', 'paste', 'cut'].forEach(evento => {
+        campo.addEventListener(evento, function (e) {
+            e.preventDefault();
+            alert('Por seguridad, no se permite copiar o pegar en este campo.');
+        });
+    });
+});
+
+
+ // ...tus otras validaciones arriba (como email, nombre, etc.)
+
+// === Validación visual de la fortaleza de la contraseña ===
+document.addEventListener("DOMContentLoaded", function () {
+    const passwordInput = document.getElementById('password');
+
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function () {
+            const password = this.value;
+            const fortaleza = calcularFortalezaPassword(password);
+            actualizarBarraFortaleza(fortaleza);
+        });
+    }
+});
+
+function calcularFortalezaPassword(password) {
+    let puntos = 0;
+    if (password.length >= 8) puntos++;
+    if (password.length >= 12) puntos++;
+    if (/[a-z]/.test(password)) puntos++;
+    if (/[A-Z]/.test(password)) puntos++;
+    if (/[0-9]/.test(password)) puntos++;
+    if (/[^A-Za-z0-9]/.test(password)) puntos++;
+
+    const niveles = ['muy débil', 'débil', 'media', 'fuerte', 'muy fuerte'];
+    const nivel = Math.min(Math.floor(puntos / 1.2), 4);
+    return { nivel, texto: niveles[nivel], puntos };
+}
+
+function actualizarBarraFortaleza(fortaleza) {
+    const barra = document.getElementById('strengthBar');
+    const clases = [
+        'strength-weak',
+        'strength-weak',
+        'strength-medium',
+        'strength-strong',
+        'strength-very-strong'
+    ];
+    if (barra) {
+        barra.className = 'password-strength ' + clases[fortaleza.nivel];
+    }
+}
+
+
+
+    </script>
+    </body>
 
 </html>
+
+    
+
+
+
